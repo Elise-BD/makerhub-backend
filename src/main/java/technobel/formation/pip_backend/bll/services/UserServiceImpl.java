@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import technobel.formation.pip_backend.dal.entities.User;
+import technobel.formation.pip_backend.dal.enums.Role;
 import technobel.formation.pip_backend.dal.repositories.UserRepository;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
+import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
 import technobel.formation.pip_backend.pl.models.forms.LoginForm;
 import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
 import technobel.formation.pip_backend.pl.models.forms.UserForm;
@@ -27,7 +29,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void register(RegisterForm form) {
+        if(form == null) throw new IllegalArgumentException("Le formulaire est vide.");
 
+        User u = new User();
+        u.setUsername(form.username());
+        u.setPassword(form.password());
+        u.setFirstname(form.firstname());
+        u.setLastname(form.lastname());
+        u.setRole(Role.UTILISATEUR);
+        u.setDisabled(false);
+        userRepository.save(u);
     }
 
     @Override
@@ -40,9 +51,10 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(id);
     }
 
+    //TODO check filter disabled users
     @Override
     public Page<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+        return (Page<User>) userRepository.findAll(pageable).stream().filter(user -> user.getDisabled() == false);
     }
 
     @Override
@@ -61,6 +73,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(Integer id) {
+        User u = getById(id).orElseThrow(() -> new EntityNotFoundException("Aucune entité trouvée pour cet ID : " +id));
 
+        u.setDisabled(true);
+        userRepository.save(u);
     }
 }
