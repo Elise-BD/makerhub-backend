@@ -2,28 +2,41 @@ package technobel.formation.pip_backend.bll.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import technobel.formation.pip_backend.dal.entities.User;
 import technobel.formation.pip_backend.dal.enums.Role;
 import technobel.formation.pip_backend.dal.repositories.UserRepository;
+import technobel.formation.pip_backend.pl.config.security.JWTProvider;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
-import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
 import technobel.formation.pip_backend.pl.models.forms.LoginForm;
 import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
 import technobel.formation.pip_backend.pl.models.forms.UserForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JWTProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTProvider jwtProvider, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -33,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
         User u = new User();
         u.setUsername(form.username());
-        u.setPassword(form.password());
+        u.setPassword(passwordEncoder.encode(form.password()));
         u.setFirstname(form.firstname());
         u.setLastname(form.lastname());
         u.setRole(Role.UTILISATEUR);
@@ -43,7 +56,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public AuthDTO login(LoginForm form) {
-        return null;
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(form.username(), form.password()));
+
+        User user = userRepository.findByUsername(form.username())
+                .orElseThrow(() -> new EntityNotFoundException("No player entity corresponding to this login (username)."));
+
+        String token = jwtProvider.generateToken(user.getUsername(), user.getRole());
+        List<Role> roles = new ArrayList<>();
+        roles.add(user.getRole());
+
+        return AuthDTO.builder()
+                .token(token)
+                .username(user.getUsername())
+                .roles(new HashSet<>(roles))
+                .build();
     }
 
     @Override
@@ -54,7 +80,9 @@ public class UserServiceImpl implements UserService{
     //TODO check filter disabled users
     @Override
     public Page<User> getAll(Pageable pageable) {
-        return (Page<User>) userRepository.findAll(pageable).stream().filter(user -> user.getDisabled() == false);
+        Page<User> originalPage = userRepository.findAll(pageable);
+        List<User> filteredList = originalPage.stream().filter(u -> !u.getDisabled()).collect(Collectors.toList());
+        return new PageImpl<>(filteredList, pageable, filteredList.size());
     }
 
     @Override

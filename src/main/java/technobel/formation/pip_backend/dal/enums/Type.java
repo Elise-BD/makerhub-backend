@@ -1,6 +1,6 @@
 package technobel.formation.pip_backend.dal.enums;
 
-public enum PersonalityType {
+public enum Type {
     ARCHITECTE,
     LOGICIEN,
     COMMANDANT,

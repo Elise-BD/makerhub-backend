@@ -1,6 +1,6 @@
 package technobel.formation.pip_backend.dal.enums;
 
-public enum PersonalityFamily {
+public enum Family {
     ANALYSTES,
     DIPLOMATES,
     SENTINELLES,
