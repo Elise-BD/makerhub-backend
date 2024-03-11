@@ -77,12 +77,14 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(id);
     }
 
-    //TODO check filter disabled users
     @Override
-    public Page<User> getAll(Pageable pageable) {
-        Page<User> originalPage = userRepository.findAll(pageable);
-        List<User> filteredList = originalPage.stream().filter(u -> !u.getDisabled()).collect(Collectors.toList());
-        return new PageImpl<>(filteredList, pageable, filteredList.size());
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll().stream().filter(u -> !u.getDisabled()).collect(Collectors.toList());
     }
 
     @Override

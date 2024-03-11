@@ -8,6 +8,7 @@ import technobel.formation.pip_backend.pl.models.forms.LoginForm;
 import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
 import technobel.formation.pip_backend.pl.models.forms.UserForm;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -18,7 +19,9 @@ public interface UserService {
 
     Optional<User> getById(Integer id);
 
-    Page<User> getAll(Pageable pageable);
+    Optional<User> findByUsername(String username);
+
+    List<User> getAll();
 
     void update(UserForm form, Integer id);
 

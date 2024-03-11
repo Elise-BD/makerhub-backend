@@ -57,7 +57,16 @@ public class DataInit implements InitializingBean {
             userRepository.save(u1);
         }
 
-
+        if(!userRepository.existsById(3)) {
+            User u2 = new User();
+            u2.setUsername("JPP");
+            u2.setPassword(passwordEncoder.encode("Test1234="));
+            u2.setFirstname("Jean");
+            u2.setLastname("Peuplus");
+            u2.setRole(Role.UTILISATEUR);
+            u2.setDisabled(false);
+            userRepository.save(u2);
+        }
 
 
     }

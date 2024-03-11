@@ -1,20 +1,24 @@
 package technobel.formation.pip_backend.pl.controllers;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import technobel.formation.pip_backend.bll.services.UserService;
+import technobel.formation.pip_backend.dal.entities.User;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
 import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
 import technobel.formation.pip_backend.pl.models.forms.LoginForm;
 import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
 import technobel.formation.pip_backend.pl.models.forms.UserForm;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,10 +26,12 @@ import technobel.formation.pip_backend.pl.models.forms.UserForm;
 public class UserController {
 
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserDetailsService userDetailsService) {
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @PreAuthorize("isAnonymous()")
@@ -48,12 +54,15 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{username}")
+    public ResponseEntity<UserDTO> findByUsername(@PathVariable String username){
+        return ResponseEntity.ok(UserDTO.fromEntityToDTO(userService.findByUsername(username).orElseThrow(()-> new EntityNotFoundException("Aucune entité trouvée pour ce username :" +username))));
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
-    public ResponseEntity<Page<UserDTO>> getAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(userService.getAll(pageable).map(UserDTO::fromEntityToDTO));
+    public ResponseEntity<List<UserDTO>> getAll() {
+        return ResponseEntity.ok(userService.getAll().stream().map(UserDTO::fromEntityToDTO).toList());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -62,5 +71,7 @@ public class UserController {
         userService.update(form, id);
     }
 
-
+    public void delete(@PathVariable("id") Integer id){
+        userService.delete(id);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import technobel.formation.pip_backend.dal.enums.PersonalityResult;
 import technobel.formation.pip_backend.dal.enums.RiasecResult;
 import technobel.formation.pip_backend.dal.enums.Role;
+import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -94,4 +95,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return !getDisabled();
     }
+
 }
