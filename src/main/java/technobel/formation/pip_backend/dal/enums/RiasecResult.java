@@ -5,7 +5,7 @@ import lombok.Getter;
 public enum RiasecResult {
     REALISTE("R"),
     INVESTIGATEUR("I"),
-    ARTISTIQUE("A"),
+    ARTISTE("A"),
     SOCIAL("S"),
     ENTREPRENANT("E"),
     CONVENTIONNEL("C");

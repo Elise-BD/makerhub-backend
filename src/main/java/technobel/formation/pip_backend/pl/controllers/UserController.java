@@ -14,9 +14,7 @@ import technobel.formation.pip_backend.bll.services.UserService;
 import technobel.formation.pip_backend.dal.entities.User;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
 import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
-import technobel.formation.pip_backend.pl.models.forms.LoginForm;
-import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
-import technobel.formation.pip_backend.pl.models.forms.UserForm;
+import technobel.formation.pip_backend.pl.models.forms.*;
 
 import java.util.List;
 
@@ -70,6 +68,19 @@ public class UserController {
     public void update(@PathVariable("id") Integer id, @RequestBody UserForm form){
         userService.update(form, id);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id:[0-9]+}/personality")
+    public void updatePersonality(@PathVariable("id") Integer id, @RequestBody PersonalityForm form){
+        userService.updatePersonality(form, id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id:[0-9]+}/riasec")
+    public void updateRiasec(@PathVariable("id") Integer id, @RequestBody RiasecForm form){
+        userService.updateRiasec(form, id);
+    }
+
 
     public void delete(@PathVariable("id") Integer id){
         userService.delete(id);

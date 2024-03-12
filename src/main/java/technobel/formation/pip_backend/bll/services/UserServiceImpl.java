@@ -8,19 +8,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import technobel.formation.pip_backend.dal.entities.User;
+import technobel.formation.pip_backend.dal.enums.RiasecResult;
 import technobel.formation.pip_backend.dal.enums.Role;
 import technobel.formation.pip_backend.dal.repositories.UserRepository;
 import technobel.formation.pip_backend.pl.config.security.JWTProvider;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
-import technobel.formation.pip_backend.pl.models.forms.LoginForm;
-import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
-import technobel.formation.pip_backend.pl.models.forms.UserForm;
+import technobel.formation.pip_backend.pl.models.forms.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,7 +93,25 @@ public class UserServiceImpl implements UserService{
         u.setFirstname(form.firstname());
         u.setLastname(form.lastname());
         u.setPersonality(form.personality());
-        u.setRiasec(form.riasec());
+        Set<RiasecResult> riasec = Set.of(form.riasec1(), form.riasec2(), form.riasec3());
+        u.setRiasec(riasec);
+        userRepository.save(u);
+    }
+
+    public void updatePersonality(PersonalityForm form, Integer id){
+        if(form == null) throw new IllegalArgumentException("Le formulaire est vide.");
+
+        User u = getById(id).orElseThrow(() -> new EntityNotFoundException("Aucune entité trouvée pour cet ID : " +id));
+        u.setPersonality(form.personality());
+        userRepository.save(u);
+    }
+
+    public void updateRiasec(RiasecForm form, Integer id){
+        if(form == null) throw new IllegalArgumentException("Le formulaire est vide.");
+
+        User u = getById(id).orElseThrow(() -> new EntityNotFoundException("Aucune entité trouvée pour cet ID : " +id));
+        Set<RiasecResult> riasec = Set.of(form.riasec1(), form.riasec2(), form.riasec3());
+        u.setRiasec(riasec);
         userRepository.save(u);
     }
 

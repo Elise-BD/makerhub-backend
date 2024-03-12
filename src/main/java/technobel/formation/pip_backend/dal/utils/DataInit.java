@@ -39,6 +39,7 @@ public class DataInit implements InitializingBean {
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("Test1234="));
             admin.setFirstname("Admin");
+            admin.setLastname("Istrateur");
             admin.setRole(Role.ADMIN);
             admin.setDisabled(false);
             userRepository.save(admin);
@@ -68,6 +69,29 @@ public class DataInit implements InitializingBean {
             userRepository.save(u2);
         }
 
+        if(!userRepository.existsById(4)) {
+            User u3 = new User();
+            u3.setUsername("kami");
+            u3.setPassword(passwordEncoder.encode("Test1234="));
+            u3.setFirstname("Camille");
+            u3.setLastname("Onette");
+            u3.setRole(Role.UTILISATEUR);
+            u3.setPersonality(PersonalityResult.ISFP);
+            u3.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.ARTISTE, RiasecResult.SOCIAL, RiasecResult.REALISTE)));
+            u3.setDisabled(false);
+            userRepository.save(u3);
+        }
+
+        if(!userRepository.existsById(5)) {
+            User u4 = new User();
+            u4.setUsername("maryone");
+            u4.setPassword(passwordEncoder.encode("Test1234="));
+            u4.setFirstname("Marie");
+            u4.setLastname("Onette");
+            u4.setRole(Role.UTILISATEUR);
+            u4.setDisabled(false);
+            userRepository.save(u4);
+        }
 
     }
 }
