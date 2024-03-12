@@ -81,7 +81,8 @@ public class UserController {
         userService.updateRiasec(form, id);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id:[0-9]+}")
     public void delete(@PathVariable("id") Integer id){
         userService.delete(id);
     }
