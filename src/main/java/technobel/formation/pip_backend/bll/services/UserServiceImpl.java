@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void update(UserForm form, Integer id) {
+    public void update(UserFormAdmin form, Integer id) {
         if(form == null) throw new IllegalArgumentException("Le formulaire est vide.");
 
         User u = getById(id).orElseThrow(() -> new EntityNotFoundException("Aucune entité trouvée pour cet ID : " +id));
@@ -92,9 +92,22 @@ public class UserServiceImpl implements UserService{
         u.setPassword(form.password());
         u.setFirstname(form.firstname());
         u.setLastname(form.lastname());
+        u.setRole(form.role());
         u.setPersonality(form.personality());
         Set<RiasecResult> riasec = Set.of(form.riasec1(), form.riasec2(), form.riasec3());
         u.setRiasec(riasec);
+        userRepository.save(u);
+    }
+
+    @Override
+    public void update(UserFormProfile form, Integer id) {
+        if(form == null) throw new IllegalArgumentException("Le formulaire est vide.");
+
+        User u = getById(id).orElseThrow(() -> new EntityNotFoundException("Aucune entité trouvée pour cet ID : " +id));
+        u.setUsername(form.username());
+        u.setPassword(form.password());
+        u.setFirstname(form.firstname());
+        u.setLastname(form.lastname());
         userRepository.save(u);
     }
 

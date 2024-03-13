@@ -19,7 +19,7 @@ import technobel.formation.pip_backend.pl.models.forms.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 @CrossOrigin("*")
 public class UserController {
 
@@ -46,43 +46,49 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id:[0-9]+}")
+    @GetMapping("/user/{id:[0-9]+}")
     public ResponseEntity<UserDTO> getById(@PathVariable Integer id){
         return ResponseEntity.ok(UserDTO.fromEntityToDTO(userService.getById(id).orElseThrow(()-> new EntityNotFoundException("Aucune entité trouvée pour cet ID :" +id))));
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}")
+    @GetMapping("/user/{username}")
     public ResponseEntity<UserDTO> findByUsername(@PathVariable String username){
         return ResponseEntity.ok(UserDTO.fromEntityToDTO(userService.findByUsername(username).orElseThrow(()-> new EntityNotFoundException("Aucune entité trouvée pour ce username :" +username))));
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/all")
+    @GetMapping("/user/all")
     public ResponseEntity<List<UserDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll().stream().map(UserDTO::fromEntityToDTO).toList());
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id:[0-9]+}")
-    public void update(@PathVariable("id") Integer id, @RequestBody UserForm form){
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/user/{id:[0-9]+}")
+    public void update(@PathVariable("id") Integer id, @RequestBody UserFormAdmin form){
         userService.update(form, id);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id:[0-9]+}/personality")
+    @PutMapping("/profile/{id:[0-9]+}")
+    public void update(@PathVariable("id") Integer id, @RequestBody UserFormProfile form){
+        userService.update(form, id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/user/{id:[0-9]+}/personality")
     public void updatePersonality(@PathVariable("id") Integer id, @RequestBody PersonalityForm form){
         userService.updatePersonality(form, id);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id:[0-9]+}/riasec")
+    @PutMapping("/user/{id:[0-9]+}/riasec")
     public void updateRiasec(@PathVariable("id") Integer id, @RequestBody RiasecForm form){
         userService.updateRiasec(form, id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id:[0-9]+}")
+    @DeleteMapping("/user/{id:[0-9]+}")
     public void delete(@PathVariable("id") Integer id){
         userService.delete(id);
     }

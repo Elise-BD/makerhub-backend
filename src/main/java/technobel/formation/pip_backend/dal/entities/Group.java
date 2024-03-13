@@ -17,12 +17,15 @@ public class Group {
     @Column(name = "id")
     private Integer id;
 
+    @Setter
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Setter
     @Column(name = "disabled")
     private Boolean disabled;
 
+    @Setter
     @ManyToMany(mappedBy = "groups")
     private Set<User> users = new LinkedHashSet<>();
 

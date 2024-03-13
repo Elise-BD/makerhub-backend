@@ -21,7 +21,9 @@ public interface UserService {
 
     List<User> getAll();
 
-    void update(UserForm form, Integer id);
+    void update(UserFormAdmin form, Integer id);
+
+    void update(UserFormProfile form, Integer id);
 
     void delete(Integer id);
 
