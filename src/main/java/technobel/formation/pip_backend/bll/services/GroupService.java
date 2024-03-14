@@ -17,4 +17,8 @@ public interface GroupService {
     List<Group> getAll();
 
     void delete(Integer id);
+
+    void join(Integer groupId, String username);
+
+    void leave(Integer groupId, String username);
 }
