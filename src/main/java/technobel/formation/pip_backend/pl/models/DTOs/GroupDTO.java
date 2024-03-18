@@ -9,9 +9,13 @@ import java.util.stream.Collectors;
 public record GroupDTO(
         Integer id,
         String name,
-        Set<UserDTO> users
+        Set<UserStatsDTO> users
 ) {
     public static GroupDTO fromEntityToDTO(Group entity){
-        return new GroupDTO(entity.getId(), entity.getName(), entity.getUsers().stream().map(UserDTO::fromEntityToDTO).collect(Collectors.toSet()));
+        return new GroupDTO(
+                entity.getId(),
+                entity.getName(),
+                entity.getUsers().stream().map(UserStatsDTO::fromEntityToDTO).collect(Collectors.toSet())
+        );
     }
 }

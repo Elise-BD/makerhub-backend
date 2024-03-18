@@ -24,6 +24,12 @@ public class GroupController {
         this.groupService = groupService;
     }
 
+    @PreAuthorize("hasRole('ADMIN') || hasRole('ENCADRANT')")
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody GroupForm form){
+        groupService.create(form);
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
@@ -32,25 +38,18 @@ public class GroupController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id:[0-9]+}")
+    @GetMapping("/stats/{id:[0-9]+}")
     public ResponseEntity<GroupDTO> getById(@PathVariable Integer id){
         return ResponseEntity.ok(GroupDTO.fromEntityToDTO(groupService.getById(id).orElseThrow(()-> new EntityNotFoundException("Aucune entité GROUPE trouvée pour cet ID :" +id))));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('ENCADRANT')")
     @DeleteMapping("/{id:[0-9]+}")
     public void delete(@PathVariable("id") Integer id){
         groupService.delete(id);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody GroupForm form){
-        groupService.create(form);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('ENCADRANT')")
     @GetMapping("/join/{groupId:[0-9]+}/{username}")
     @ResponseStatus(HttpStatus.OK)
     public void join(@PathVariable Integer groupId, @PathVariable String username){
@@ -64,8 +63,8 @@ public class GroupController {
         groupService.join(groupId, auth.getName());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/unjoin/{groupId:[0-9]+}/{username}")
+    @PreAuthorize("hasRole('ADMIN') || hasRole('ENCADRANT')")
+    @GetMapping("/leave/{groupId:[0-9]+}/{username}")
     @ResponseStatus(HttpStatus.OK)
     public void leave(@PathVariable Integer groupId, @PathVariable String username){
         groupService.leave(groupId,username);

@@ -140,5 +140,13 @@ public class DataInit implements InitializingBean {
             groupRepository.save(g2);
         }
 
+        if(!groupRepository.existsById(3)){
+            Group g3 = new Group();
+            g3.setName(".NET Ciney");
+            g3.setDisabled(false);
+            g3.setUsers(new HashSet<>(Arrays.asList()));
+            groupRepository.save(g3);
+        }
+
     }
 }
