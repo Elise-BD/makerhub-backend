@@ -14,6 +14,8 @@ import technobel.formation.pip_backend.bll.services.UserService;
 import technobel.formation.pip_backend.dal.entities.User;
 import technobel.formation.pip_backend.pl.models.DTOs.AuthDTO;
 import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
+import technobel.formation.pip_backend.pl.models.DTOs.UserStatsDTO;
+import technobel.formation.pip_backend.pl.models.DTOs.UserStatsShortDTO;
 import technobel.formation.pip_backend.pl.models.forms.*;
 
 import java.util.List;
@@ -57,10 +59,16 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.fromEntityToDTO(userService.findByUsername(username).orElseThrow(()-> new EntityNotFoundException("Aucune entité trouvée pour ce username :" +username))));
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/all")
     public ResponseEntity<List<UserDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll().stream().map(UserDTO::fromEntityToDTO).toList());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/user/stats/all")
+    public ResponseEntity<List<UserStatsShortDTO>> getAllUserStats() {
+        return ResponseEntity.ok(userService.getAll().stream().map(UserStatsShortDTO::fromEntityToDTO).toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
