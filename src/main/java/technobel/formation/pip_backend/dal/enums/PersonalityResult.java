@@ -15,10 +15,10 @@ public enum PersonalityResult {
     ISFJ(FirstLetter.I, MiddleLetters.SF, LastLetter.J, Family.SENTINELLES, PersonalityColor.TEAL, Type.DEFENSEUR),
     ESTJ(FirstLetter.E, MiddleLetters.ST, LastLetter.J, Family.SENTINELLES, PersonalityColor.TEAL, Type.DIRECTEUR),
     ESFJ(FirstLetter.E, MiddleLetters.SF, LastLetter.J, Family.SENTINELLES, PersonalityColor.TEAL, Type.CONSUL),
-    ISTP(FirstLetter.I, MiddleLetters.ST, LastLetter.P, Family.SENTINELLES, PersonalityColor.YELLOW, Type.VIRTUOSE),
-    ISFP(FirstLetter.I, MiddleLetters.SF, LastLetter.P, Family.SENTINELLES, PersonalityColor.YELLOW, Type.AVENTURIER),
-    ESTP(FirstLetter.E, MiddleLetters.ST, LastLetter.P, Family.SENTINELLES, PersonalityColor.YELLOW, Type.ENTREPRENEUR),
-    ESFP(FirstLetter.E, MiddleLetters.SF, LastLetter.P, Family.SENTINELLES, PersonalityColor.YELLOW, Type.AMUSEUR)
+    ISTP(FirstLetter.I, MiddleLetters.ST, LastLetter.P, Family.EXPLORATEURS, PersonalityColor.YELLOW, Type.VIRTUOSE),
+    ISFP(FirstLetter.I, MiddleLetters.SF, LastLetter.P, Family.EXPLORATEURS, PersonalityColor.YELLOW, Type.AVENTURIER),
+    ESTP(FirstLetter.E, MiddleLetters.ST, LastLetter.P, Family.EXPLORATEURS, PersonalityColor.YELLOW, Type.ENTREPRENEUR),
+    ESFP(FirstLetter.E, MiddleLetters.SF, LastLetter.P, Family.EXPLORATEURS, PersonalityColor.YELLOW, Type.AMUSEUR)
     ;
 
     @Getter

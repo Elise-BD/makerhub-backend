@@ -123,6 +123,7 @@ public class DataInit implements InitializingBean {
             userRepository.save(u6);
         }
 
+
         //GROUPES DEMO
         if(!groupRepository.existsById(1)){
             Group g1 = new Group();
@@ -148,5 +149,85 @@ public class DataInit implements InitializingBean {
             groupRepository.save(g3);
         }
 
+        if(!groupRepository.existsById(4)){
+
+            Group g4 = new Group();
+            g4.setName("Test Stats");
+            g4.setDisabled(false);
+            groupRepository.save(g4);
+
+            User u1 = new User();
+            u1.setUsername("JB");
+            u1.setPassword(passwordEncoder.encode("Test1234="));
+            u1.setFirstname("Jean");
+            u1.setLastname("Bonneau");
+            u1.setRole(Role.UTILISATEUR);
+            u1.setPersonality(PersonalityResult.ENFJ);
+            u1.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.ENTREPRENANT, RiasecResult.SOCIAL, RiasecResult.CONVENTIONNEL)));
+            u1.setDisabled(false);
+            u1.getGroups().add(g4);
+            userRepository.save(u1);
+
+            User u3 = new User();
+            u3.setUsername("samy");
+            u3.setPassword(passwordEncoder.encode("Test1234="));
+            u3.setFirstname("Sam");
+            u3.setLastname("Dépasse");
+            u3.setRole(Role.UTILISATEUR);
+            u3.setPersonality(PersonalityResult.ISFP);
+            u3.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.ARTISTE, RiasecResult.SOCIAL, RiasecResult.REALISTE)));
+            u3.setDisabled(false);
+            u3.getGroups().add(g4);
+            userRepository.save(u3);
+
+            User u7 = new User();
+            u7.setUsername("ellie");
+            u7.setPassword(passwordEncoder.encode("Test1234="));
+            u7.setFirstname("Ella");
+            u7.setLastname("Faim");
+            u7.setRole(Role.ENCADRANT);
+            u7.setPersonality(PersonalityResult.ENTJ);
+            u7.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.ENTREPRENANT, RiasecResult.REALISTE, RiasecResult.INVESTIGATEUR)));
+            u7.setDisabled(false);
+            u7.getGroups().add(g4);
+            userRepository.save(u7);
+
+            User u8 = new User();
+            u8.setUsername("sarak");
+            u8.setPassword(passwordEncoder.encode("Test1234="));
+            u8.setFirstname("Sarah");
+            u8.setLastname("Kroche");
+            u8.setRole(Role.UTILISATEUR);
+            u8.setPersonality(PersonalityResult.ISFP);
+            u8.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.INVESTIGATEUR, RiasecResult.SOCIAL, RiasecResult.ARTISTE)));
+            u8.setDisabled(false);
+            u8.getGroups().add(g4);
+            userRepository.save(u8);
+
+            User u2 = new User();
+            u2.setUsername("marco");
+            u2.setPassword(passwordEncoder.encode("Test1234="));
+            u2.setFirstname("Marc");
+            u2.setLastname("Hassin");
+            u2.setRole(Role.ENCADRANT);
+            u2.setPersonality(PersonalityResult.ENTJ);
+            u2.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.ENTREPRENANT, RiasecResult.REALISTE, RiasecResult.INVESTIGATEUR)));
+            u2.setDisabled(false);
+            u2.getGroups().add(g4);
+            userRepository.save(u2);
+
+            User u4 = new User();
+            u4.setUsername("anako");
+            u4.setPassword(passwordEncoder.encode("Test1234="));
+            u4.setFirstname("Anna");
+            u4.setLastname("Konda");
+            u4.setRole(Role.UTILISATEUR);
+            u4.setPersonality(PersonalityResult.ISFP);
+            u4.setRiasec(new HashSet<>(Arrays.asList(RiasecResult.INVESTIGATEUR, RiasecResult.SOCIAL, RiasecResult.ARTISTE)));
+            u4.setDisabled(false);
+            u4.getGroups().add(g4);
+            userRepository.save(u4);
+
+        }
     }
 }

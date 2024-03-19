@@ -5,6 +5,7 @@ import technobel.formation.pip_backend.dal.entities.User;
 import technobel.formation.pip_backend.dal.enums.PersonalityResult;
 import technobel.formation.pip_backend.dal.enums.RiasecResult;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public record UserStatsDTO(
         String firstLetter = "";
         String middleLetters = "";
         String lastLetter = "";
+        Set<RiasecResult> riasec = new HashSet<>();
 
         if(entity.getPersonality() != null){
             personality = entity.getPersonality().toString();
@@ -57,6 +59,9 @@ public record UserStatsDTO(
             }
         }
 
+        if(entity.getRiasec() != null){
+            riasec = entity.getRiasec();
+        }
 
         return new UserStatsDTO(
                 entity.getId(),
@@ -69,7 +74,7 @@ public record UserStatsDTO(
                 firstLetter,
                 middleLetters,
                 lastLetter,
-                entity.getRiasec()
+                riasec
         );
     }
 }

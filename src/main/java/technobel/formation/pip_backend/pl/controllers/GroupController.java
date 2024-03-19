@@ -38,7 +38,7 @@ public class GroupController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/stats/{id:[0-9]+}")
+    @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<GroupDTO> getById(@PathVariable Integer id){
         return ResponseEntity.ok(GroupDTO.fromEntityToDTO(groupService.getById(id).orElseThrow(()-> new EntityNotFoundException("Aucune entité GROUPE trouvée pour cet ID :" +id))));
     }
