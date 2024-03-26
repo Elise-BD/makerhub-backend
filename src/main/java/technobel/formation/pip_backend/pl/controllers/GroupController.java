@@ -8,9 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import technobel.formation.pip_backend.bll.services.GroupService;
 import technobel.formation.pip_backend.pl.models.DTOs.GroupDTO;
-import technobel.formation.pip_backend.pl.models.DTOs.UserDTO;
 import technobel.formation.pip_backend.pl.models.forms.GroupForm;
-import technobel.formation.pip_backend.pl.models.forms.RegisterForm;
 
 import java.util.List;
 @RestController
